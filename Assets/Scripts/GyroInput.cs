@@ -13,6 +13,7 @@ public sealed class GyroInput {
 		Screen.autorotateToLandscapeLeft = false;
 		Screen.autorotateToLandscapeRight = false;
 		Screen.orientation = ScreenOrientation.LandscapeLeft;
+		Input.gyro.enabled = true;
 
 	}
 
@@ -25,13 +26,15 @@ public sealed class GyroInput {
 	}
 
 	public float getTilt() {
-		if (Application.isEditor) {
-			return Input.GetAxis ("Vertical");
-		} else {
-			return Input.gyro.attitude.y * 10;
+		const float MULTIPLIER = 10;
+		switch (Application.platform) {
+		case RuntimePlatform.Android:
+			return Input.acceleration.y * MULTIPLIER;
+		case RuntimePlatform.IPhonePlayer:
+			return Input.gyro.attitude.y * MULTIPLIER;
+		default:
+			return Input.GetAxis ("Horizontal");
 		}
-
-		//
 	}
 }
 
