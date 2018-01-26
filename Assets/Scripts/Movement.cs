@@ -39,11 +39,10 @@ public class Movement : MonoBehaviour
         }
         */
         transform.Rotate(new Vector3(0, 0, rotation * rotationSpeed * Time.deltaTime));
-#if UNITY_EDITOR
-        float horizontal = Input.GetAxis("Horizontal");
+
+		float horizontal = GyroInput.getInstance().getTilt();
 
         UpdateRotation(horizontal);
-#endif
 
     }
 
