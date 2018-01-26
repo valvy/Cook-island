@@ -28,7 +28,7 @@ public sealed class GyroInput {
 		if (Application.isEditor) {
 			return Input.GetAxis ("Vertical");
 		} else {
-			return Input.gyro.attitude.y;
+			return Input.gyro.attitude.y * 10;
 		}
 
 		//
