@@ -158,7 +158,7 @@ PlayerSettings:
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
-    Android: com.Company.ProductName
+    Android: nl.quget.ggj2018
     Standalone: unity.quget.GGJ2018
     Tizen: com.Company.ProductName
     iOS: com.Company.ProductName

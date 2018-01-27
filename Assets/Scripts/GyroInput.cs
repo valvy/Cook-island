@@ -24,7 +24,7 @@ public sealed class GyroInput {
 	}
 
 	public float getTilt() {
-		const float MULTIPLIER = -10.5f;
+		const float MULTIPLIER = -1.5f;
 
 		switch (Application.platform) {
 		case RuntimePlatform.Android:
