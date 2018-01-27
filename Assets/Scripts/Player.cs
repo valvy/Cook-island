@@ -103,6 +103,7 @@ public class Player : MonoBehaviour
         if(playerState == PlayerState.Listening)
         {
             timer += Time.deltaTime;
+            //Debug.Log(timer + ":" + timeToNextState);
             if (timer > timeToNextState)
             {
                 playerState = PlayerState.None;
@@ -152,8 +153,8 @@ public class Player : MonoBehaviour
     }
     public void StartMoving()
     {
-        timer = 0;
         timeToNextState = timeToMove;
+        timer = 0;
         playerState = PlayerState.StartStairs;
         walkAudioSource.Play();
 
