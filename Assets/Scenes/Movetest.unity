@@ -224,11 +224,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef20c55c65167f147aea4475da46eaeb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 1
-  rotationSpeed: 150
-  range: 40
+  speed: 0.75
+  rotationSpeed: 350
+  range: 65
   timeToMove: 30
+  timeToSpawnTrail: 1
   hideObject: {fileID: 0}
+  trailPrefab: {fileID: 1463537284869430, guid: db0225aaf76ecda42aaa35dbf8cefcf2,
+    type: 2}
   debugText: {fileID: 1669576792}
 --- !u!212 &237154070
 SpriteRenderer:

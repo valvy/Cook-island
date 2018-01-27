@@ -21,25 +21,40 @@ public class Movement : MonoBehaviour
     [SerializeField]
     private float timeToMove = 30;
 
+    [SerializeField]
+    private float timeToSpawnTrail = 1;
+
     private float rotation;
 
     private float timer = 0;
+    private float trailTimer = 0;
 
     private bool isMoving = false;
 
     [SerializeField]
     private GameObject hideObject;
 
+    [SerializeField]
+    private GameObject trailPrefab;
+
     private Vector2 startPosition;
 
 
     [SerializeField]
     private Text debugText;
+
+    private float zeroPoint = 0;
 	// Use this for initialization
 	void Start ()
     {
         StartMoving();
         startPosition = transform.position;
+
+
+        float horizontal = GyroInput.getInstance().getTilt();
+        horizontal = Mathf.Clamp(horizontal, -1, 1);
+
+        zeroPoint = horizontal;
 
     }
 
@@ -55,18 +70,24 @@ public class Movement : MonoBehaviour
             transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, ClampAngle(transform.eulerAngles.z, -range, range));
 
             float horizontal = GyroInput.getInstance().getTilt();
+
+            //horizontal = (horizontal + zeroPoint) - 1;
             horizontal = Mathf.Clamp(horizontal, -1, 1);
-            /*
-            Debug.Log(horizontal);
-            if (Mathf.Abs(horizontal) < 0.05f)
+
+            if (debugText != null)
             {
-                horizontal = 0;
-            }*/
-            debugText.text = horizontal.ToString() ;
+                debugText.text = horizontal.ToString();
+            }
             UpdateRotation(horizontal);
 
             timer += Time.deltaTime;
+            trailTimer += Time.deltaTime;
 
+            if (trailTimer > timeToSpawnTrail)
+            {
+                SpawnTrail();
+                trailTimer = 0;
+            }
 
             if (timer > timeToMove)
             {
@@ -75,6 +96,15 @@ public class Movement : MonoBehaviour
 
         }
 
+    }
+
+    private void SpawnTrail()
+    {
+        if (trailPrefab != null)
+        {
+            GameObject trail = GameObject.Instantiate(trailPrefab);
+            trail.transform.position = transform.position;
+        }
     }
     private void MoveDone()
     {
