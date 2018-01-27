@@ -160,9 +160,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   storyClips:
-  - {fileID: 8300000, guid: 4a326f752fc8e3247806bc19240d1300, type: 3}
-  - {fileID: 8300000, guid: 8de054f919f0dc8428c9ac7fc4402fa7, type: 3}
-  - {fileID: 8300000, guid: 2718dacbe28ba6344849c8d26bffff75, type: 3}
+  - {fileID: 8300000, guid: fa41f5bc245b1004aa7f5fbd7383835d, type: 3}
 --- !u!212 &212479933485676556
 SpriteRenderer:
   m_ObjectHideFlags: 1

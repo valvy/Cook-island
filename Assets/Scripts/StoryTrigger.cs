@@ -32,6 +32,8 @@ public class StoryTrigger : MonoBehaviour
         if(!hit)
         {
             audioSource.Play();
+            //Make transparent
+            GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.70f);
             hit = true;
         }
     }

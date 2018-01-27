@@ -16,8 +16,10 @@ public class Player : MonoBehaviour
 
     private float timeToNextState = 5;
 
+    private float timeToMove = 5;
+
     [SerializeField]
-    private float timeAddState = 2;
+    private float timeAddState = 0;
 
     [SerializeField]
     private float timeToSpawnTrail = 1;
@@ -129,7 +131,6 @@ public class Player : MonoBehaviour
     {
         walkAudioSource.Stop();
         playerState = PlayerState.None;
-        timeToNextState = timeToNextState + timeAddState;
         HideScreen();
         if (startButton != null)
         {
@@ -152,6 +153,7 @@ public class Player : MonoBehaviour
     public void StartMoving()
     {
         timer = 0;
+        timeToNextState = timeToMove;
         playerState = PlayerState.StartStairs;
         walkAudioSource.Play();
 
