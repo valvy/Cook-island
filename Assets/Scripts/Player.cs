@@ -17,8 +17,7 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float range = 20;
 
-    [SerializeField]
-    private float timeToMove = 30;
+    private float timeToNextState = 5;
 
     [SerializeField]
     private float timeToSpawnTrail = 1;
@@ -28,7 +27,16 @@ public class Player : MonoBehaviour
     private float timer = 0;
     private float trailTimer = 0;
 
-    private bool isMoving = false;
+
+    private enum PlayerState
+    {
+        StartStairs,
+        Waiting,
+        EndStairs,
+        None
+    }
+
+    private PlayerState playerState = PlayerState.None;
 
     [SerializeField]
     private GameObject hideObject;
@@ -45,26 +53,40 @@ public class Player : MonoBehaviour
 
     [SerializeField]
     private int collectCount = 0;
+
+    [SerializeField]
+    private AudioClip startStairsClip;
+
+    [SerializeField]
+    private AudioClip endStairsClip;
+
+    [SerializeField]
+    private AudioClip therapyClip;
+
+    [SerializeField]
+    private AudioSource audioSource;
+
+    [SerializeField]
+    private Text scoreText;
 	// Use this for initialization
 	void Start ()
     {
         StartMoving();
         startPosition = transform.position;
 
-
-        //float horizontal = GyroInput.getInstance().getTilt();
-        //horizontal = Mathf.Clamp(horizontal, -1, 1);
-    
-        //zeroPoint = horizontal;
-
     }
 
-
+    private void PlayAudio(AudioClip audioClip)
+    {
+        audioSource.Stop();
+        audioSource.clip = audioClip;
+        audioSource.Play();
+    }
     // Update is called once per frame
     void Update ()
     {
 
-        if (isMoving)
+        if (playerState == PlayerState.StartStairs || playerState == PlayerState.EndStairs)
         {
             transform.Translate(new Vector3(0, 1, 0) * speed * Time.deltaTime);
             transform.Rotate(new Vector3(0, 0, rotation * rotationSpeed * Time.deltaTime));
@@ -88,11 +110,20 @@ public class Player : MonoBehaviour
                 trailTimer = 0;
             }
 
-            if (timer > timeToMove)
+            if (timer > timeToNextState)
             {
                 MoveDone();
             }
 
+        }
+        if(playerState == PlayerState.Waiting)
+        {
+            timer += Time.deltaTime;
+
+            if(timer > timeToNextState)
+            {
+                ListenDone();
+            }
         }
 
     }
@@ -105,25 +136,56 @@ public class Player : MonoBehaviour
             trail.transform.position = transform.position;
         }
     }
+
+    private void ListenDone()
+    {
+        playerState = PlayerState.EndStairs;
+        timeToNextState = endStairsClip.length;
+        PlayAudio(endStairsClip);
+
+        AudioSource[] audioSources = GameObject.FindObjectsOfType<AudioSource>();
+        for(int i = 0; i < audioSources.Length; i++)
+        {
+            audioSources[i].mute = false;
+        }
+    }
     private void MoveDone()
     {
-        isMoving = false;
-        timer = 0;
-
-        if (hideObject != null)
+        if(playerState == PlayerState.EndStairs)
         {
-            hideObject.SetActive(false);
+            scoreText.text = "Score: " + collectCount;
+            playerState = PlayerState.None;
+            if (hideObject != null)
+            {
+                hideObject.SetActive(false);
+            }
         }
+        else
+        {
+            playerState = PlayerState.Waiting;
+            timeToNextState = therapyClip.length;
+            AudioSource[] audioSources = GameObject.FindObjectsOfType<AudioSource>();
+            for (int i = 0; i < audioSources.Length; i++)
+            {
+                audioSources[i].mute = true;
+            }
+            audioSource.mute = false;
+            PlayAudio(therapyClip);
+        }
+        timer = 0;
+        /*
         Vector2 positionMoved = new Vector2(Mathf.Abs(transform.position.x - startPosition.x), Mathf.Abs(transform.position.y - startPosition.y));
         if (OnMoveDone != null)
         {
             OnMoveDone(positionMoved);
-        }
+        }*/
     }
     public void StartMoving()
     {
         timer = 0;
-        isMoving = true;
+        playerState = PlayerState.StartStairs;
+        timeToNextState = startStairsClip.length;
+        PlayAudio(startStairsClip) ;
 
         if (hideObject != null)
         {
