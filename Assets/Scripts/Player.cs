@@ -68,10 +68,14 @@ public class Player : MonoBehaviour
 
     [SerializeField]
     private Text scoreText;
+
+    [SerializeField]
+    private Button startButton;
+
 	// Use this for initialization
 	void Start ()
     {
-        StartMoving();
+        //StartMoving();
         startPosition = transform.position;
 
     }
@@ -158,6 +162,10 @@ public class Player : MonoBehaviour
             if (hideObject != null)
             {
                 hideObject.SetActive(false);
+                if (startButton != null)
+                {
+                    startButton.gameObject.SetActive(false);
+                }
             }
         }
         else
@@ -193,7 +201,14 @@ public class Player : MonoBehaviour
         }
 
     }
-
+    public void OnStartClick()
+    {
+        StartMoving();
+        if(startButton != null)
+        {
+            startButton.gameObject.SetActive(false);
+        }
+    }
     public void UpdateRotation(float rotation)
     {
         this.rotation = rotation;
