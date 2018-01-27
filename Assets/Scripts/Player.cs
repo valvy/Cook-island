@@ -147,7 +147,7 @@ public class Player : MonoBehaviour
 
         walkAudioSource.Stop();
         timeToNextState = waitSeconds;
-        ShowScreen();
+        //ShowScreen();
     }
     public void StartMoving()
     {
