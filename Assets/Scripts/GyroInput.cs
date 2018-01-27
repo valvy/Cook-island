@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.iOS;
 
 
 public sealed class GyroInput {
@@ -9,29 +8,33 @@ public sealed class GyroInput {
 	private static GyroInput instance;
 
 
-	private GyroInput(){
+	private GyroInput() {
 		Screen.autorotateToLandscapeLeft = false;
 		Screen.autorotateToLandscapeRight = false;
 		Screen.orientation = ScreenOrientation.LandscapeLeft;
+		Input.gyro.enabled = true;
 
 	}
 
-	public static GyroInput getInstance(){
+	public static GyroInput getInstance() {
 		if (GyroInput.instance == null) {
 			GyroInput.instance = new GyroInput ();
 		}
 		return instance;
-
 	}
 
 	public float getTilt() {
-		if (Application.isEditor) {
-			return Input.GetAxis ("Vertical");
-		} else {
-			return Input.gyro.attitude.y;
-		}
+		const float MULTIPLIER = 10;
 
-		//
+		switch (Application.platform) {
+		case RuntimePlatform.Android:
+                return Input.acceleration.x * MULTIPLIER;
+		case RuntimePlatform.IPhonePlayer:
+                return Input.gyro.attitude.y * MULTIPLIER;
+		default:
+			const float MINIFIER = 0.1f;
+			return Input.GetAxis ("Horizontal") * MINIFIER;
+		}
 	}
 }
 
