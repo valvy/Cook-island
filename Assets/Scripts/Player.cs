@@ -104,11 +104,7 @@ public class Player : MonoBehaviour
             if (timer > timeToNextState)
             {
                 playerState = PlayerState.None;
-
-                if (hideObject != null)
-                {
-                    hideObject.SetActive(false);
-                }
+                HideScreen();
 
             }
         }
@@ -134,10 +130,7 @@ public class Player : MonoBehaviour
         walkAudioSource.Stop();
         playerState = PlayerState.None;
         timeToNextState = timeToNextState + timeAddState;
-        if (hideObject != null)
-        {
-            hideObject.SetActive(false);
-        }
+        HideScreen();
         if (startButton != null)
         {
             startButton.gameObject.SetActive(true);
@@ -154,12 +147,7 @@ public class Player : MonoBehaviour
 
         walkAudioSource.Stop();
         timeToNextState = waitSeconds;
-
-        Debug.Log(waitSeconds);
-        if (hideObject != null)
-        {
-            hideObject.SetActive(true);
-        }
+        ShowScreen();
     }
     public void StartMoving()
     {
@@ -167,10 +155,8 @@ public class Player : MonoBehaviour
         playerState = PlayerState.StartStairs;
         walkAudioSource.Play();
 
-        if (hideObject != null)
-        {
-            hideObject.SetActive(true);
-        }
+
+        ShowScreen();
 
     }
     public void OnStartClick()
@@ -186,6 +172,17 @@ public class Player : MonoBehaviour
         this.rotation = rotation;
     }
 
+    public void HideScreen()
+    {
+        hideObject.SetActive(true);
+        hideObject.GetComponent<Animator>().SetTrigger("FadeOut");
+    }
+
+    public void ShowScreen()
+    {
+        hideObject.SetActive(true);
+        hideObject.GetComponent<Animator>().SetTrigger("FadeIn");
+    }
     private void OnCollisionEnter2D(Collision2D collision)
     {
         CollectAble collectAble = collision.gameObject.GetComponent<CollectAble>();
