@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-public class Movement : MonoBehaviour
+
+public class Player : MonoBehaviour
 {
-
-
     public delegate void OnMoveDoneEvent(Vector2 postionMoved);
     public event OnMoveDoneEvent OnMoveDone;
 
@@ -39,11 +38,13 @@ public class Movement : MonoBehaviour
 
     private Vector2 startPosition;
 
-
     [SerializeField]
     private Text debugText;
 
     private float zeroPoint = 0;
+
+    [SerializeField]
+    private int collectCount = 0;
 	// Use this for initialization
 	void Start ()
     {
@@ -51,10 +52,10 @@ public class Movement : MonoBehaviour
         startPosition = transform.position;
 
 
-        float horizontal = GyroInput.getInstance().getTilt();
-        horizontal = Mathf.Clamp(horizontal, -1, 1);
-
-        zeroPoint = horizontal;
+        //float horizontal = GyroInput.getInstance().getTilt();
+        //horizontal = Mathf.Clamp(horizontal, -1, 1);
+    
+        //zeroPoint = horizontal;
 
     }
 
@@ -70,8 +71,6 @@ public class Movement : MonoBehaviour
             transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, ClampAngle(transform.eulerAngles.z, -range, range));
 
             float horizontal = GyroInput.getInstance().getTilt();
-
-            //horizontal = (horizontal + zeroPoint) - 1;
             horizontal = Mathf.Clamp(horizontal, -1, 1);
 
             if (debugText != null)
@@ -136,6 +135,17 @@ public class Movement : MonoBehaviour
     public void UpdateRotation(float rotation)
     {
         this.rotation = rotation;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        CollectAble collectAble = collision.gameObject.GetComponent<CollectAble>();
+        Debug.Log(collectAble);
+        if (collectAble != null)
+        {
+            Destroy(collectAble.gameObject);
+            collectCount++;
+        }
     }
 
     // Thank you internet
