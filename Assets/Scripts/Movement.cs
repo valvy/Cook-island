@@ -21,14 +21,21 @@ public class Movement : MonoBehaviour
     [SerializeField]
     private float timeToMove = 30;
 
+    [SerializeField]
+    private float timeToSpawnTrail = 1;
+
     private float rotation;
 
     private float timer = 0;
+    private float trailTimer = 0;
 
     private bool isMoving = false;
 
     [SerializeField]
     private GameObject hideObject;
+
+    [SerializeField]
+    private GameObject trailPrefab;
 
     private Vector2 startPosition;
 
@@ -62,11 +69,20 @@ public class Movement : MonoBehaviour
             {
                 horizontal = 0;
             }*/
-            debugText.text = horizontal.ToString() ;
+            if (debugText != null)
+            {
+                debugText.text = horizontal.ToString();
+            }
             UpdateRotation(horizontal);
 
             timer += Time.deltaTime;
+            trailTimer += Time.deltaTime;
 
+            if (trailTimer > timeToSpawnTrail)
+            {
+                SpawnTrail();
+                trailTimer = 0;
+            }
 
             if (timer > timeToMove)
             {
@@ -75,6 +91,15 @@ public class Movement : MonoBehaviour
 
         }
 
+    }
+
+    private void SpawnTrail()
+    {
+        if (trailPrefab != null)
+        {
+            GameObject trail = GameObject.Instantiate(trailPrefab);
+            trail.transform.position = transform.position;
+        }
     }
     private void MoveDone()
     {
