@@ -5,9 +5,6 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
-    public delegate void OnMoveDoneEvent(Vector2 postionMoved);
-    public event OnMoveDoneEvent OnMoveDone;
-
     [SerializeField]
     private float speed;
 
@@ -17,10 +14,10 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float range = 20;
 
-    private float timeToNextState = 3;
+    private float timeToNextState = 5;
 
     [SerializeField]
-    private float time = 2;
+    private float timeAddState = 2;
 
     [SerializeField]
     private float timeToSpawnTrail = 1;
@@ -34,8 +31,7 @@ public class Player : MonoBehaviour
     private enum PlayerState
     {
         StartStairs,
-        Waiting,
-        EndStairs,
+        Listening,
         None
     }
 
@@ -47,18 +43,11 @@ public class Player : MonoBehaviour
     [SerializeField]
     private GameObject trailPrefab;
 
-    private Vector2 startPosition;
-
-    [SerializeField]
-    private Text debugText;
-
-    private float zeroPoint = 0;
-
     [SerializeField]
     private int collectCount = 0;
 
     [SerializeField]
-    private AudioSource audioSource;
+    private AudioSource walkAudioSource;
 
     [SerializeField]
     private Text scoreText;
@@ -66,21 +55,17 @@ public class Player : MonoBehaviour
     [SerializeField]
     private Button startButton;
 
-    private int trollCount = 0;
-
 	// Use this for initialization
 	void Start ()
     {
-        //StartMoving();
-        startPosition = transform.position;
 
     }
 
     private void PlayAudio(AudioClip audioClip)
     {
-        audioSource.Stop();
-        audioSource.clip = audioClip;
-        audioSource.Play();
+        walkAudioSource.Stop();
+        walkAudioSource.clip = audioClip;
+        walkAudioSource.Play();
     }
     // Update is called once per frame
     void Update ()
@@ -93,7 +78,7 @@ public class Player : MonoBehaviour
                 StartMoving();
             }
         }
-        if (playerState == PlayerState.StartStairs || playerState == PlayerState.EndStairs)
+        if (playerState == PlayerState.StartStairs)
         {
             transform.Translate(new Vector3(0, 1, 0) * speed * Time.deltaTime);
 
@@ -113,35 +98,23 @@ public class Player : MonoBehaviour
             }
 
         }
-        if(playerState == PlayerState.Waiting)
+        if(playerState == PlayerState.Listening)
         {
             timer += Time.deltaTime;
-
-            if(timer > timeToNextState)
+            if (timer > timeToNextState)
             {
-                ListenDone();
+                playerState = PlayerState.None;
+                HideScreen();
+
             }
         }
-
-        //transform.Rotate(new Vector3(0, 0, rotation * rotationSpeed * Time.deltaTime));
         rotation = rotation * rotationSpeed;
         transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, ClampAngle(rotation * range, -range, range));
 
         float horizontal = GyroInput.getInstance().getTilt();
         horizontal = Mathf.Clamp(horizontal, -1, 1);
-        /*
-        if(Mathf.Abs(horizontal) < 0.075f)
-        {
-            horizontal = 0;
-        }
-        */
+
         UpdateRotation(horizontal);
-
-        if (debugText != null)
-        {
-            debugText.text = horizontal.ToString();
-        }
-
     }
 
     private void SpawnTrail()
@@ -152,88 +125,38 @@ public class Player : MonoBehaviour
             trail.transform.position = transform.position;
         }
     }
-
-    private void ListenDone()
-    {
-        playerState = PlayerState.EndStairs;
-        timeToNextState = 5;
-
-        AudioSource[] audioSources = GameObject.FindObjectsOfType<AudioSource>();
-        for(int i = 0; i < audioSources.Length; i++)
-        {
-            audioSources[i].mute = false;
-        }
-    }
     private void MoveDone()
     {
-        /*
-        if(playerState == PlayerState.EndStairs)
-        {
-            scoreText.text = "Score: " + collectCount;
-            playerState = PlayerState.None;
-            timeToNextState += time;
-            if (hideObject != null)
-            {
-                hideObject.SetActive(false);
-                if (startButton != null)
-                {
-                    startButton.gameObject.SetActive(false);
-                }
-            }
-        }
-        else
-        {
-            playerState = PlayerState.Waiting;
-            timeToNextState = therapyClip.length;
-            AudioSource[] audioSources = GameObject.FindObjectsOfType<AudioSource>();
-            for (int i = 0; i < audioSources.Length; i++)
-            {
-                audioSources[i].mute = true;
-            }
-            audioSource.mute = false;
-            PlayAudio(therapyClip);
-        }*/
-        audioSource.Stop();
+        walkAudioSource.Stop();
         playerState = PlayerState.None;
-        timeToNextState = timeToNextState + time;
-        if (hideObject != null)
-        {
-            hideObject.SetActive(false);
-        }
+        timeToNextState = timeToNextState + timeAddState;
+        HideScreen();
         if (startButton != null)
         {
             startButton.gameObject.SetActive(true);
         }
         timer = 0;
 
-        /*
-        trollCount++;
-        if (trollCount > 5)
-        {
-            timeToNextState = audioSource.clip.length;
-            audioSource.Play();
-            Debug.Log("HAHAHA");
-        }
-        */  
-        /*
-        Vector2 positionMoved = new Vector2(Mathf.Abs(transform.position.x - startPosition.x), Mathf.Abs(transform.position.y - startPosition.y));
-        if (OnMoveDone != null)
-        {
-            OnMoveDone(positionMoved);
-        }*/
+    }
+
+    public void Listening(float waitSeconds)
+    {
+
+        timer = 0;
+        playerState = PlayerState.Listening;
+
+        walkAudioSource.Stop();
+        timeToNextState = waitSeconds;
+        ShowScreen();
     }
     public void StartMoving()
     {
         timer = 0;
         playerState = PlayerState.StartStairs;
-        audioSource.Play();
-        //timeToNextState = startStairsClip.length;
-        //PlayAudio(startStairsClip) ;
+        walkAudioSource.Play();
 
-        if (hideObject != null)
-        {
-            hideObject.SetActive(true);
-        }
+
+        ShowScreen();
 
     }
     public void OnStartClick()
@@ -249,14 +172,30 @@ public class Player : MonoBehaviour
         this.rotation = rotation;
     }
 
+    public void HideScreen()
+    {
+        hideObject.SetActive(true);
+        hideObject.GetComponent<Animator>().SetTrigger("FadeOut");
+    }
+
+    public void ShowScreen()
+    {
+        hideObject.SetActive(true);
+        hideObject.GetComponent<Animator>().SetTrigger("FadeIn");
+    }
     private void OnCollisionEnter2D(Collision2D collision)
     {
         CollectAble collectAble = collision.gameObject.GetComponent<CollectAble>();
-        Debug.Log(collectAble);
         if (collectAble != null)
         {
             Destroy(collectAble.gameObject);
             collectCount++;
+        }
+
+        StoryTrigger storyTrigger = collision.gameObject.GetComponent<StoryTrigger>();
+        if(storyTrigger != null)
+        {
+            Listening(storyTrigger.GetSelectedAudioClip().length);
         }
     }
 
