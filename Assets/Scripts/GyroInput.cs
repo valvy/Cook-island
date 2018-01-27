@@ -24,11 +24,11 @@ public sealed class GyroInput {
 	}
 
 	public float getTilt() {
-		const float MULTIPLIER = 10;
+		const float MULTIPLIER = 1.5f;
 
 		switch (Application.platform) {
 		case RuntimePlatform.Android:
-                return Input.acceleration.x * MULTIPLIER;
+                return Input.acceleration.x;// * MULTIPLIER;
 		case RuntimePlatform.IPhonePlayer:
                 return Input.gyro.attitude.y * MULTIPLIER;
 		default:
