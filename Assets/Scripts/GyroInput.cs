@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.iOS;
 
 
 public sealed class GyroInput {
@@ -26,12 +25,12 @@ public sealed class GyroInput {
 	}
 
 	public float getTilt() {
-		const float MULTIPLIER = 10;
+		//const float MULTIPLIER = 10;
 		switch (Application.platform) {
 		case RuntimePlatform.Android:
-			return Input.acceleration.y * MULTIPLIER;
+                return Input.acceleration.x;// * MULTIPLIER;
 		case RuntimePlatform.IPhonePlayer:
-			return Input.gyro.attitude.y * MULTIPLIER;
+                return Input.gyro.attitude.y;// * MULTIPLIER;
 		default:
 			return Input.GetAxis ("Horizontal");
 		}
