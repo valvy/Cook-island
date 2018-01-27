@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class Movement : MonoBehaviour
 {
 
@@ -31,6 +31,10 @@ public class Movement : MonoBehaviour
     private GameObject hideObject;
 
     private Vector2 startPosition;
+
+
+    [SerializeField]
+    private Text debugText;
 	// Use this for initialization
 	void Start ()
     {
@@ -51,6 +55,14 @@ public class Movement : MonoBehaviour
             transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, ClampAngle(transform.eulerAngles.z, -range, range));
 
             float horizontal = GyroInput.getInstance().getTilt();
+            horizontal = Mathf.Clamp(horizontal, -1, 1);
+            /*
+            Debug.Log(horizontal);
+            if (Mathf.Abs(horizontal) < 0.05f)
+            {
+                horizontal = 0;
+            }*/
+            debugText.text = horizontal.ToString() ;
             UpdateRotation(horizontal);
 
             timer += Time.deltaTime;
