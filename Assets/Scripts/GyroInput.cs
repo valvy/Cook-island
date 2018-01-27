@@ -11,7 +11,7 @@ public sealed class GyroInput {
 	private GyroInput() {
 		Screen.autorotateToLandscapeLeft = false;
 		Screen.autorotateToLandscapeRight = false;
-		Screen.orientation = ScreenOrientation.LandscapeLeft;
+		//Screen.orientation = ScreenOrientation.LandscapeLeft;
 		Input.gyro.enabled = true;
 
 	}
@@ -24,11 +24,11 @@ public sealed class GyroInput {
 	}
 
 	public float getTilt() {
-		const float MULTIPLIER = 1.5f;
+		const float MULTIPLIER = -10.5f;
 
 		switch (Application.platform) {
 		case RuntimePlatform.Android:
-                return Input.acceleration.x;// * MULTIPLIER;
+                return Input.acceleration.x * -1;// * MULTIPLIER;
 		case RuntimePlatform.IPhonePlayer:
                 return Input.gyro.attitude.y * MULTIPLIER;
 		default:
