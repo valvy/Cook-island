@@ -17,7 +17,10 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float range = 20;
 
-    private float timeToNextState = 5;
+    private float timeToNextState = 3;
+
+    [SerializeField]
+    private float time = 2;
 
     [SerializeField]
     private float timeToSpawnTrail = 1;
@@ -55,23 +58,20 @@ public class Player : MonoBehaviour
     private int collectCount = 0;
 
     [SerializeField]
-    private AudioClip startStairsClip;
-
-    [SerializeField]
-    private AudioClip endStairsClip;
-
-    [SerializeField]
-    private AudioClip therapyClip;
-
-    [SerializeField]
     private AudioSource audioSource;
 
     [SerializeField]
     private Text scoreText;
+
+    [SerializeField]
+    private Button startButton;
+
+    private int trollCount = 0;
+
 	// Use this for initialization
 	void Start ()
     {
-        StartMoving();
+        //StartMoving();
         startPosition = transform.position;
 
     }
@@ -86,20 +86,17 @@ public class Player : MonoBehaviour
     void Update ()
     {
 
+        if(playerState == PlayerState.None)
+        {
+            if(Input.GetMouseButtonDown(0))
+            {
+                StartMoving();
+            }
+        }
         if (playerState == PlayerState.StartStairs || playerState == PlayerState.EndStairs)
         {
             transform.Translate(new Vector3(0, 1, 0) * speed * Time.deltaTime);
-            transform.Rotate(new Vector3(0, 0, rotation * rotationSpeed * Time.deltaTime));
-            transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, ClampAngle(transform.eulerAngles.z, -range, range));
 
-            float horizontal = GyroInput.getInstance().getTilt();
-            horizontal = Mathf.Clamp(horizontal, -1, 1);
-
-            if (debugText != null)
-            {
-                debugText.text = horizontal.ToString();
-            }
-            UpdateRotation(horizontal);
 
             timer += Time.deltaTime;
             trailTimer += Time.deltaTime;
@@ -126,6 +123,25 @@ public class Player : MonoBehaviour
             }
         }
 
+        //transform.Rotate(new Vector3(0, 0, rotation * rotationSpeed * Time.deltaTime));
+        rotation = rotation * rotationSpeed;
+        transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, ClampAngle(rotation * range, -range, range));
+
+        float horizontal = GyroInput.getInstance().getTilt();
+        horizontal = Mathf.Clamp(horizontal, -1, 1);
+        /*
+        if(Mathf.Abs(horizontal) < 0.075f)
+        {
+            horizontal = 0;
+        }
+        */
+        UpdateRotation(horizontal);
+
+        if (debugText != null)
+        {
+            debugText.text = horizontal.ToString();
+        }
+
     }
 
     private void SpawnTrail()
@@ -140,8 +156,7 @@ public class Player : MonoBehaviour
     private void ListenDone()
     {
         playerState = PlayerState.EndStairs;
-        timeToNextState = endStairsClip.length;
-        PlayAudio(endStairsClip);
+        timeToNextState = 5;
 
         AudioSource[] audioSources = GameObject.FindObjectsOfType<AudioSource>();
         for(int i = 0; i < audioSources.Length; i++)
@@ -151,13 +166,19 @@ public class Player : MonoBehaviour
     }
     private void MoveDone()
     {
+        /*
         if(playerState == PlayerState.EndStairs)
         {
             scoreText.text = "Score: " + collectCount;
             playerState = PlayerState.None;
+            timeToNextState += time;
             if (hideObject != null)
             {
                 hideObject.SetActive(false);
+                if (startButton != null)
+                {
+                    startButton.gameObject.SetActive(false);
+                }
             }
         }
         else
@@ -171,8 +192,29 @@ public class Player : MonoBehaviour
             }
             audioSource.mute = false;
             PlayAudio(therapyClip);
+        }*/
+        audioSource.Stop();
+        playerState = PlayerState.None;
+        timeToNextState = timeToNextState + time;
+        if (hideObject != null)
+        {
+            hideObject.SetActive(false);
+        }
+        if (startButton != null)
+        {
+            startButton.gameObject.SetActive(true);
         }
         timer = 0;
+
+        /*
+        trollCount++;
+        if (trollCount > 5)
+        {
+            timeToNextState = audioSource.clip.length;
+            audioSource.Play();
+            Debug.Log("HAHAHA");
+        }
+        */  
         /*
         Vector2 positionMoved = new Vector2(Mathf.Abs(transform.position.x - startPosition.x), Mathf.Abs(transform.position.y - startPosition.y));
         if (OnMoveDone != null)
@@ -184,8 +226,9 @@ public class Player : MonoBehaviour
     {
         timer = 0;
         playerState = PlayerState.StartStairs;
-        timeToNextState = startStairsClip.length;
-        PlayAudio(startStairsClip) ;
+        audioSource.Play();
+        //timeToNextState = startStairsClip.length;
+        //PlayAudio(startStairsClip) ;
 
         if (hideObject != null)
         {
@@ -193,7 +236,14 @@ public class Player : MonoBehaviour
         }
 
     }
-
+    public void OnStartClick()
+    {
+        StartMoving();
+        if(startButton != null)
+        {
+            startButton.gameObject.SetActive(false);
+        }
+    }
     public void UpdateRotation(float rotation)
     {
         this.rotation = rotation;
