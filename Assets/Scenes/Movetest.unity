@@ -225,7 +225,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 0.75
-  rotationSpeed: 150
+  rotationSpeed: 350
   range: 65
   timeToMove: 30
   timeToSpawnTrail: 1

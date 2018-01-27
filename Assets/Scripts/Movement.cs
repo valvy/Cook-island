@@ -42,11 +42,19 @@ public class Movement : MonoBehaviour
 
     [SerializeField]
     private Text debugText;
+
+    private float zeroPoint = 0;
 	// Use this for initialization
 	void Start ()
     {
         StartMoving();
         startPosition = transform.position;
+
+
+        float horizontal = GyroInput.getInstance().getTilt();
+        horizontal = Mathf.Clamp(horizontal, -1, 1);
+
+        zeroPoint = horizontal;
 
     }
 
@@ -62,13 +70,10 @@ public class Movement : MonoBehaviour
             transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, ClampAngle(transform.eulerAngles.z, -range, range));
 
             float horizontal = GyroInput.getInstance().getTilt();
+
+            horizontal = horizontal + zeroPoint;
             horizontal = Mathf.Clamp(horizontal, -1, 1);
-            /*
-            Debug.Log(horizontal);
-            if (Mathf.Abs(horizontal) < 0.05f)
-            {
-                horizontal = 0;
-            }*/
+
             if (debugText != null)
             {
                 debugText.text = horizontal.ToString();
