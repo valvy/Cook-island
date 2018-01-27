@@ -69,7 +69,10 @@ public class Movement : MonoBehaviour
             {
                 horizontal = 0;
             }*/
-            debugText.text = horizontal.ToString() ;
+            if (debugText != null)
+            {
+                debugText.text = horizontal.ToString();
+            }
             UpdateRotation(horizontal);
 
             timer += Time.deltaTime;
