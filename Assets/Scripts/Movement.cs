@@ -71,7 +71,7 @@ public class Movement : MonoBehaviour
 
             float horizontal = GyroInput.getInstance().getTilt();
 
-            horizontal = horizontal + zeroPoint;
+            //horizontal = (horizontal + zeroPoint) - 1;
             horizontal = Mathf.Clamp(horizontal, -1, 1);
 
             if (debugText != null)
