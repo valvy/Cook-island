@@ -7,9 +7,9 @@ When you started the program, you can tilt your iOS and Android device to aim at
 However the screen will turn black during that time and the Accelerometer(Android) and Gyroscope(iOS) will still function.
 
 
-![alt tag](http://heikovdheyden.nl/Cook-island/Assets/Screenshots/Mainmenu.png)
+![Screenshot of the mainmenu](http://heikovdheyden.nl/Cook-island/Assets/Screenshots/Mainmenu.png)
 
-![alt tag](http://heikovdheyden.nl/Cook-island/Assets/Screenshots/Screenshot.png)
+![Random screenshot](http://heikovdheyden.nl/Cook-island/Assets/Screenshots/Screenshot.png)
 
 
 ## Authors
