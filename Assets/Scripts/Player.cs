@@ -136,7 +136,7 @@ public class Player : MonoBehaviour
                 VA_AudioSource[] sources = GameObject.FindObjectsOfType<VA_AudioSource>();
                 for (int i = 0; i < sources.Length; i++)
                 {
-                    sources[i].BaseVolume *= 2f;
+                    sources[i].BaseVolume *= 4f;
                 }
 
                 playerState = PlayerState.None;
