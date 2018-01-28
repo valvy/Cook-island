@@ -8,6 +8,8 @@ public class StoryTrigger : MonoBehaviour
     private AudioClip[] storyClips;
     private AudioSource audioSource;
     private bool hit = false;
+
+    public bool Hit { get { return hit; } set { hit = value; } }
 	// Use this for initialization
 	void Start ()
     {
@@ -33,8 +35,8 @@ public class StoryTrigger : MonoBehaviour
         {
             audioSource.Play();
             //Make transparent
-            GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.70f);
-            hit = true;
+            GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.25f);
+            //hit = true;
         }
     }
 }

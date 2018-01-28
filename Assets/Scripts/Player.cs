@@ -103,9 +103,10 @@ public class Player : MonoBehaviour
         if(playerState == PlayerState.Listening)
         {
             timer += Time.deltaTime;
-            //Debug.Log(timer + ":" + timeToNextState);
+            Debug.Log(timer + ":" + timeToNextState);
             if (timer > timeToNextState)
             {
+                Debug.Log("Listen Done");
                 playerState = PlayerState.None;
                 HideScreen();
 
@@ -149,11 +150,11 @@ public class Player : MonoBehaviour
 
         walkAudioSource.Stop();
         timeToNextState = waitSeconds;
-        //ShowScreen();
     }
     public void StartMoving()
     {
         timeToNextState = timeToMove;
+        Debug.Log("StartMoving");
         timer = 0;
         playerState = PlayerState.StartStairs;
         walkAudioSource.Play();
@@ -198,7 +199,11 @@ public class Player : MonoBehaviour
         StoryTrigger storyTrigger = collision.gameObject.GetComponent<StoryTrigger>();
         if(storyTrigger != null)
         {
-            Listening(storyTrigger.GetSelectedAudioClip().length);
+            if (!storyTrigger.Hit)
+            {
+                Listening(storyTrigger.GetSelectedAudioClip().length);
+                storyTrigger.Hit = true;
+            }
         }
     }
 
