@@ -9,7 +9,7 @@ However the screen will turn black during that time and the Accelerometer(Androi
 
 ![alt tag](http://heikovdheyden.nl/Cook-island/Assets/Screenshots/Mainmenu.png)
 
-![alt tag](https://github.com/valvy/Cook-island/blob/master/Assets/Screenshots/Screenshot.png)
+![alt tag](http://heikovdheyden.nl/Cook-island/Assets/Screenshots/Screenshot.png)
 
 
 ## Authors
