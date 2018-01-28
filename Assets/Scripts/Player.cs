@@ -63,6 +63,31 @@ public class Player : MonoBehaviour
 
     }
 
+	void DontLeaveEarth() {
+		const float MAX_DOWN = -65f;
+		const float MAX_UP = 45f;
+		const float MAX_RIGHT = 50f;
+		const float MAX_LEFT = -40f;
+
+
+		Vector3 newPosition = this.transform.position;
+
+		if (this.transform.position.y > MAX_UP) {
+			newPosition.y = MAX_UP;
+		}
+		if (this.transform.position.y < MAX_DOWN) {
+			newPosition.y = MAX_DOWN;
+		}
+		if (this.transform.position.x > MAX_RIGHT) {
+			newPosition.x = MAX_RIGHT;
+		}
+		if (this.transform.position.x < MAX_LEFT) {
+			newPosition.x = MAX_LEFT;
+		}
+		this.transform.position = newPosition;
+	}
+
+
     private void PlayAudio(AudioClip audioClip)
     {
         walkAudioSource.Stop();
@@ -72,7 +97,7 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update ()
     {
-
+		DontLeaveEarth ();
         if(playerState == PlayerState.None)
         {
             if(Input.GetMouseButtonDown(0))
