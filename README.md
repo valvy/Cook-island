@@ -6,6 +6,8 @@ In addition to the theme Transmission, we chosen a theme about Irritatable Bowel
 When you started the program, you can tilt your iOS and Android device to aim at the direction you wish to go. The character will walk into that direction for five seconds.
 However the screen will turn black during that time and the Accelerometer(Android) and Gyroscope(iOS) will still function.
 
+![alt tag](https://raw.github.com/valvy/Cook-island/Assets/Screenshots/Mainmenu.png)
+
 ![alt tag](https://raw.github.com/valvy/Cook-island/Assets/Screenshots/Screenshot.png)
 
 ## Authors
@@ -16,4 +18,6 @@ However the screen will turn black during that time and the Accelerometer(Androi
 - Shengnan Chen(Psychologist/Art)
 - Margryt Fennema(Art)
 
+## License
 
+This software is distributed under [Attribution-NonCommercial-ShareAlike 3.0 Unported (CC BY-NC-SA 3.0)](https://github.com/valvy/Cook-island/blob/develop/License.md)
