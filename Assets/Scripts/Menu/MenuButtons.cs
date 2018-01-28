@@ -7,20 +7,56 @@ public class MenuButtons : MonoBehaviour {
 
     public string StartScene;
     public GameObject instructionsScreen;
+    public GameObject loadingScreen;
+    public AudioSource introSound;
+    public GameObject skipButton;
+    private AsyncOperation asyncLoader;
 
     public void StartGame()
     {
+        if (loadingScreen != null)
+            loadingScreen.SetActive(true);
+        if (introSound != null)
+            introSound.Play();
         StartCoroutine(LoadGameSceneAsync());
+        
     }
 
     IEnumerator LoadGameSceneAsync()
     {
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(StartScene);
-
-        while (!asyncLoad.isDone)
+        asyncLoader = SceneManager.LoadSceneAsync(StartScene);
+        asyncLoader.allowSceneActivation = false;
+        StartCoroutine(StartGameWhenLouisIsDoneTalking());
+        while (asyncLoader.progress < 0.9f)
         {
-            yield return null;
+            yield return new WaitForSeconds(0.1F);
         }
+        GameSceneDoneLoading();
+    }
+
+    private void GameSceneDoneLoading()
+    {
+        if (skipButton != null)
+            skipButton.SetActive(true);
+    }
+
+    IEnumerator StartGameWhenLouisIsDoneTalking()
+    {
+        if (introSound != null)
+        {
+            while (introSound.isPlaying)
+            {
+                yield return new WaitForSeconds(0.1f);
+            }
+            if (asyncLoader != null)
+                asyncLoader.allowSceneActivation = true;
+        }
+    }
+
+    public void SkipLouis()
+    {
+        if (asyncLoader != null)
+            asyncLoader.allowSceneActivation = true;
     }
 
     public void OpenInstructions()
