@@ -13,6 +13,7 @@ However the screen will turn black during that time and the Accelerometer(Androi
 
 
 ## Authors
+![The team](http://heikovdheyden.nl/Cook-island/Assets/ggj_team.jpg)
 - Heiko van der Heijden (Programming)
 - Louis Zantema (Psychologist)
 - Eduard Meivogel(Programming)
