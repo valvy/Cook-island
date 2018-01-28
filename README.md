@@ -19,7 +19,7 @@ However the screen will turn black during that time and the Accelerometer(Androi
 - Eduard Meivogel(Programming)
 - Steffan Venema(Programming)
 - Shengnan Chen(Psychologist/Art)
-- Margryt Fennema(Art)
+- Margryt Fennema(Health sciences/Art)
 
 ## License
 
