@@ -64,10 +64,10 @@ public class Player : MonoBehaviour
     }
 
 	void DontLeaveEarth() {
-		const float MAX_DOWN = -65f;
-		const float MAX_UP = 45f;
-		const float MAX_RIGHT = 50f;
-		const float MAX_LEFT = -40f;
+		const float MAX_DOWN = -75f;
+		const float MAX_UP = 50f;
+		const float MAX_RIGHT = 60f;
+		const float MAX_LEFT = -60f;
 
 
 		Vector3 newPosition = this.transform.position;
@@ -132,6 +132,13 @@ public class Player : MonoBehaviour
             if (timer > timeToNextState)
             {
                 Debug.Log("Listen Done");
+
+                VA_AudioSource[] sources = GameObject.FindObjectsOfType<VA_AudioSource>();
+                for (int i = 0; i < sources.Length; i++)
+                {
+                    sources[i].BaseVolume *= 2f;
+                }
+
                 playerState = PlayerState.None;
                 HideScreen();
 

@@ -34,6 +34,11 @@ public class StoryTrigger : MonoBehaviour
     {
         if(!played)
         {
+            VA_AudioSource[] sources = GameObject.FindObjectsOfType<VA_AudioSource>();
+            for(int i = 0; i < sources.Length; i++)
+            {
+                sources[i].BaseVolume *= 0.5f;
+            }
             audioSource.Play();
             //Make transparent
             GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.25f);
