@@ -31,8 +31,10 @@ public class StoryTrigger : MonoBehaviour
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if(!hit)
+        if(!audioSource.isPlaying)
         {
+
+            Debug.Log("yo");
             audioSource.Play();
             //Make transparent
             GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.25f);
