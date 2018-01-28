@@ -240,7 +240,7 @@ AudioSource:
   MinDistance: 3.3063679
   MaxDistance: 500
   Pan2D: 0
-  rolloffMode: 0
+  rolloffMode: 1
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -310,7 +310,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   storyClips:
-  - {fileID: 8300000, guid: 052a86ac47c30c8469ef5c3e0b2d6280, type: 3}
+  - {fileID: 8300000, guid: 5980e058be5b92a46acda0582859cb5d, type: 3}
 --- !u!212 &212479933485676556
 SpriteRenderer:
   m_ObjectHideFlags: 1
